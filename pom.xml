@@ -1,0 +1,78 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.att.amdocsinfr.project-ubl</groupId>
+		<artifactId>ubl-base</artifactId>
+		<version>1.0.0</version>
+	</parent>
+
+	<groupId>com.att.amdocsinfr.project-ubl.installer</groupId>
+	
+	<version>1.1.0</version>	
+
+	<artifactId>ubl-installer</artifactId>
+	
+	<packaging>pom</packaging>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.att.amdocsinfr.installer</groupId>
+				<artifactId>installer-assemblies</artifactId>
+				<version>${installer-version}</version>
+				<type>zip</type>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
+	<properties>
+		<deployment.root>infra_tools</deployment.root>
+		<generic.zip.assembly.descriptor>target/dependency/assembly/generic_zip_assembly.xml</generic.zip.assembly.descriptor>
+		<skip.unpack.generic.assemblies>true</skip.unpack.generic.assemblies>	
+		<assembly.root.dir>${deployment.root}/cloud/${artifactId}</assembly.root.dir>
+		<installer-version>2.4.15</installer-version>
+	</properties>
+
+	<modules>
+		<module>package</module>	
+		<module>prepare</module>
+		<module>install</module>
+	</modules>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<skipIfEmpty>true</skipIfEmpty>
+				</configuration>
+			</plugin>
+	
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>unpack-generic-assemblies</id>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<phase>validate</phase>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>com.att.amdocsinfr.installer</groupId>
+									<artifactId>installer-assemblies</artifactId>
+									<type>zip</type>
+								</artifactItem>
+							</artifactItems>
+							<skip>${skip.unpack.generic.assemblies}</skip>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>	
+
+</project>
